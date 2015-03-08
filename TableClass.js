@@ -46,7 +46,6 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
     return columnNumber + 1;
 
   }
-
   
   this.getColumnMetaData = function(columnName, offset) {
     return this.sheet.getRange(this.headersRow - 1 - offset, this.getColumnIndexByName(columnName)).getValue();
