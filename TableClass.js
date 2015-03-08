@@ -1,4 +1,4 @@
-var TableClass = function(spreadSheetID, sheetName, headersRow) {
+var TableClass = function(spreadSheetID, SheetName, headersRow) {
   
   if(spreadSheetID == undefined)
     throw ("Error: you have to define a Spreadsheet ID");
@@ -18,7 +18,8 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     this.sheet = SpreadsheetApp.openById(this.spreadSheetID).getSheetByName(this.sheetName);
   }
 
-  // it sorts ascending by first column
+  // extra-functions
+
   this.orderTable = function() {
     var tableRange = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
     tableRange.sort(1);
@@ -31,6 +32,8 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
   this.getActiveColumn = function() {
     return SpreadsheetApp.getActiveRange().getColumn();
   }
+
+  // columns
   
   this.getColumnIndexByName = function(columnName) {
 
@@ -43,13 +46,18 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     return columnNumber + 1;
 
   }
-    
-  this.getValueFromCell = function(row,column) {
-    return this.sheet.getRange(row, column).getValue();
-  }
+
   
   this.getColumnMetaData = function(columnName, offset) {
     return this.sheet.getRange(this.headersRow - 1 - offset, this.getColumnIndexByName(columnName)).getValue();
+  }
+
+  
+
+  // cells
+
+  this.getValueFromCell = function(row,column) {
+    return this.sheet.getRange(row, column).getValue();
   }
   
   this.getValuesFromColumnByName = function(columnName) {
