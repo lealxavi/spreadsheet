@@ -232,9 +232,13 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
   this.insertRowBeforeLast = function () {
     this.sheet.insertRowBefore(this.sheet.getLastRow());
   }
-  
+ 
   this.insertRowAfterLast = function () {
     this.sheet.insertRowAfter(this.sheet.getLastRow());
+  }
+ 
+  this.deleteRow = function(rowPosition) {
+    this.sheet.deleteRow(rowPosition)
   }
   
 
