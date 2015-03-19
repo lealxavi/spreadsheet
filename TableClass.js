@@ -1,4 +1,4 @@
-var TableClass = function(spreadSheetID, SheetName, headersRow) {
+var TableClass = function(spreadSheetID, sheetName, headersRow) {
   
   if(spreadSheetID == undefined)
     throw ("Error: you have to define a Spreadsheet ID");
@@ -18,8 +18,7 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
     this.sheet = SpreadsheetApp.openById(this.spreadSheetID).getSheetByName(this.sheetName);
   }
 
-  // extra-functions
-
+  // it sorts ascending by first column
   this.orderTable = function() {
     var tableRange = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
     tableRange.sort(1);
@@ -32,31 +31,27 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
   this.getActiveColumn = function() {
     return SpreadsheetApp.getActiveRange().getColumn();
   }
-
-  // columns
   
   this.getColumnIndexByName = function(columnName) {
 
     var values       = this.sheet.getDataRange().getValues();
     var columnNumber = values[this.headersRow - 1].indexOf(columnName);
-             
+        
     if (columnNumber === -1)
       throw("Error: you have given a Column Name that doesn't exist (" +columnName + ")");
 
+    
+    
     return columnNumber + 1;
 
+  }
+    
+  this.getValueFromCell = function(row,column) {
+    return this.sheet.getRange(row, column).getValue();
   }
   
   this.getColumnMetaData = function(columnName, offset) {
     return this.sheet.getRange(this.headersRow - 1 - offset, this.getColumnIndexByName(columnName)).getValue();
-  }
-
-  
-
-  // cells
-
-  this.getValueFromCell = function(row,column) {
-    return this.sheet.getRange(row, column).getValue();
   }
   
   this.getValuesFromColumnByName = function(columnName) {
@@ -91,7 +86,7 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
     
     var columnNumber = this.getColumnIndexByName(columnName);
     var value = this.getValueFromCell(row,columnNumber); 
-    
+        
     if(value.length<=0 && allowBlankValue == false)
        throw("The value for "+ columnName +" its blank");
     
@@ -171,6 +166,18 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
     
   }
   
+  this.getRowByValueAndColumnName = function(value,columnName) {
+    var columnValues = this.getValuesFromColumnByName(columnName);
+    var row          = columnValues.indexOf(value);
+    
+    if (row == -1)
+      throw "Error: value ("+ value +") not found on that table"
+    
+    row = row + this.headersRow + 1;
+      
+    return row;
+  }
+  
   // Aguments for pairColumnValue are 'value' and 'column'
   this.setCellValueByPairAndColumnName = function(pairColumnValue, columnName, value) {
     
@@ -185,6 +192,16 @@ var TableClass = function(spreadSheetID, SheetName, headersRow) {
     
     this.setValue(row,column,value);
   
+  }
+  
+  this.setValuesOnNewRow = function (collection) {
+  
+    var row = this.getLastRow() + 1;
+    var columnsNames = Object.keys(collection);
+     
+    for (var i = 0; i < columnsNames.length; ++i)
+      this.setValueByColumnName(row,columnsNames[i],collection[columnsNames[i]]);
+    
   }
   
   this.getRowValues = function(row) {
