@@ -18,10 +18,9 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     this.sheet = SpreadsheetApp.openById(this.spreadSheetID).getSheetByName(this.sheetName);
   }
 
-  // it sorts ascending by first column
-  this.orderTable = function() {
-    var tableRange = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
-    tableRange.sort(1);
+  this.orderTable = function(columnName, ascendingBool) {
+    var tableRange   = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
+    tableRange.sort({column: this.getColumnIndexByName(columnName), ascending: ascendingBool});
   }
   
   this.getActiveRow = function() {
@@ -99,6 +98,10 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
   this.setBackground = function(row,columnName,backgroundColor) {
     var columnNumber = this.getColumnIndexByName(columnName);
     this.sheet.getRange(row,columnNumber).setBackground(backgroundColor);
+  }
+  
+  this.setFontColor = function(row,backgroundColor) {
+    this.sheet.getRange(row, 1, 1, this.sheet.getLastColumn()).setFontColor(backgroundColor);
   }
   
   this.getActiveCellValueByColumn = function(columnName) {
