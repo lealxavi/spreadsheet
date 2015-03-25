@@ -36,12 +36,16 @@ And then some extra properties:
 SpreadsheetApp.openById(this.spreadSheetID).getSheetByName(this.sheetName);
 ```
 
-## Methods
+## Main Methods
 
-### orderTable ( )
+### orderTable (columnName, ascendingBool)
 
-It orders the table considering the headers row. 
+It orders the table by the name of the column ``columnName`` and in ascending order if the second parameter is ``true``.
 
+```javascript
+  myTable.orderTable("Names",false);
+
+```
 
 ----------------
 ### getActiveRow ( )
