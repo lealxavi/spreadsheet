@@ -46,29 +46,52 @@ It orders the table by the name of the column ``columnName`` and in ascending or
   myTable.orderTable("Names",false);
 
 ```
-
 ----------------
 ### getActiveRow ( )
 
-Get the row selected on the spreadsheet
+Get the row selected on the spreadsheet. Basically what it does is: 
+
+```javascript
+  return SpreadsheetApp.getActiveRange().getRow();
+```
 
 ----------------
 ### getActiveColumn ( )
 
-Get the column selected on the spreadsheet
+Get the column selected on the spreadsheet. Basically what it does is:
+
+```javascript
+  return SpreadsheetApp.getActiveRange().getColumn();
+```
 
 ----------------
-### getColumnIndexByName ( )
+### getColumnIndexByName (columnName)
 
-```Parameters```
+It's a really useful function because you have to work with the ``Column Number`` in all the Spreadsheet API functions. This method ``return`` the Column Number [1 - Max number of columns].
 
-+ ```columnName``` (String) : Name of the column you want to get his index
+```javascript 
+  var columnNumber = myTable.getColumnIndexByName("Names");
+
+```
+
 
 ----------------
-### getValueFromCell
+### getCellValueByRowAndColumnName( * )
 
+Parameters (*)
 
-```Parameters```
+  + row (``Integer``)
+  + columnName (``String``)
+  + allowBlankValue (``Boolean`)
 
-  + ```row``` (Integer)
-  + ```column``` (integer)
+This method return the content of a cell if you give him the ``Row Number`` and a ``Column Name``. By default this methods throws an error if the cell value is void, but you can avoid this error by passing a third boolean parameter ``true``. 
+
+```javascript
+
+var cellContent = myTable.getCellValueByRowAndColumnName(
+  myTable.getActiveRow(),
+  "Names",
+  true,
+);
+
+``` 

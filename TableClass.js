@@ -22,7 +22,9 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     var tableRange   = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
     tableRange.sort({column: this.getColumnIndexByName(columnName), ascending: ascendingBool});
   }
-  
+ 
+  // Active Rows and Columns
+
   this.getActiveRow = function() {
     return SpreadsheetApp.getActiveRange().getRow();
   }
@@ -39,12 +41,25 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     if (columnNumber === -1)
       throw("Error: you have given a Column Name that doesn't exist (" +columnName + ")");
 
-    
-    
     return columnNumber + 1;
 
   }
+   
+  this.getCellValueByRowAndColumnName = function (row, columnName,allowBlankValue) {
     
+    if(allowBlankValue == null)
+      allowBlankValue = false;
+    
+    var columnNumber = this.getColumnIndexByName(columnName);
+    var value = this.getValueFromCell(row,columnNumber); 
+        
+    if(value.length<=0 && allowBlankValue == false)
+       throw("The value for "+ columnName +" its blank");
+    
+    return value;
+  
+  }
+
   this.getValueFromCell = function(row,column) {
     return this.sheet.getRange(row, column).getValue();
   }
@@ -76,21 +91,6 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     
     return variable;
     
-  }
-  
-  this.getCellValueByRowAndColumnName = function (row, columnName,allowBlankValue) {
-    
-    if(allowBlankValue == null)
-      allowBlankValue = false;
-    
-    var columnNumber = this.getColumnIndexByName(columnName);
-    var value = this.getValueFromCell(row,columnNumber); 
-        
-    if(value.length<=0 && allowBlankValue == false)
-       throw("The value for "+ columnName +" its blank");
-    
-    return value;
-  
   }
   
   /* BACKGROUNDS */
