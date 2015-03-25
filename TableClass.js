@@ -18,6 +18,8 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     this.sheet = SpreadsheetApp.openById(this.spreadSheetID).getSheetByName(this.sheetName);
   }
 
+  /* MAIN METHODS */
+
   this.orderTable = function(columnName, ascendingBool) {
     var tableRange   = this.sheet.getRange(this.headersRow+1,1,this.sheet.getLastRow(),this.sheet.getLastColumn());
     tableRange.sort({column: this.getColumnIndexByName(columnName), ascending: ascendingBool});
@@ -60,6 +62,9 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
   
   }
 
+
+
+
   this.getValueFromCell = function(row,column) {
     return this.sheet.getRange(row, column).getValue();
   }
@@ -80,6 +85,26 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
     return values;
   }
  
+  /* ADVANCE MAIN METHODS */
+
+  // Arguments for pairColumnValue are 'value' and 'column'
+
+  this.getCellValueByPairAndColumnName = function(pairColumnValue, columnName) {
+    
+    var columnValues = this.getValuesFromColumnByName(pairColumnValue.column);
+    var row = columnValues.indexOf(pairColumnValue.value);
+    
+    if (row == -1)
+      throw "Error: value ("+ pairColumnValue.value +") not found on that table"
+      
+    row = row + this.headersRow + 1;
+    column = this.getColumnIndexByName(columnName);
+    
+    return this.getValueFromCell(row,column);    
+    
+  }
+
+
   this.getValueAndFormatFromCell = function(row, columnName) {
     
     var variable = {};
@@ -152,23 +177,7 @@ var TableClass = function(spreadSheetID, sheetName, headersRow) {
         
     return collectionColumnsAndValues;  
   }
-  
-  // Aguments for pairColumnValue are 'value' and 'column'
-  this.getCellValueByPairAndColumnName = function(pairColumnValue, columnName) {
     
-    var columnValues = this.getValuesFromColumnByName(pairColumnValue.column);
-    var row = columnValues.indexOf(pairColumnValue.value);
-    
-    if (row == -1)
-      throw "Error: value ("+ pairColumnValue.value +") not found on that table"
-      
-    row = row + this.headersRow + 1;
-    column = this.getColumnIndexByName(columnName);
-    
-    return this.getValueFromCell(row,column);    
-    
-  }
-  
   this.getRowByValueAndColumnName = function(value,columnName) {
     var columnValues = this.getValuesFromColumnByName(columnName);
     var row          = columnValues.indexOf(value);

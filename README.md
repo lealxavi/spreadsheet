@@ -95,3 +95,17 @@ var cellContent = myTable.getCellValueByRowAndColumnName(
 );
 
 ``` 
+---------
+
+# Advance and main methods
+
+### getCellValueByPairAndColumnName ( * )
+
+Parameters (*)
+
+  + pairColumnValue (Object)
+    + value (String)
+    + column (String)
+  + columnName (String)
+
+----------
